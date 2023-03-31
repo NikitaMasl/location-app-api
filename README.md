@@ -1,5 +1,5 @@
 # location-app-api
-
+Written with Nextjs and TypeScript
 ## local deployment
 make sure that port 27027 is free
 run next command to up mongoDB container from root directory
