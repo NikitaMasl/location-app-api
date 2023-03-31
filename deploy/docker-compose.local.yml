@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:4.2
+    ports:
+      - 27027:27017
+    restart: always
+    volumes:
+      - /tmp/location-app-api/db:/data/db
