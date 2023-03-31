@@ -12,4 +12,9 @@ next, navigate to core dir and run
 npm run start:dev
 ```
 
-in core/.env you can specify other environment vars
+in core/.env you can specify other environment vars. By default core-srvice runs on 8000 port
+
+You can study API documentation on
+```
+${BASE_URL}/api/docs
+```
