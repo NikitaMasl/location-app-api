@@ -18,3 +18,12 @@ You can study API documentation on
 ```
 ${BASE_URL}/api/docs
 ```
+## local deployment
+create docker network in your enviroment with next command
+```
+docker network create location-app-api
+```
+and from root directory up core and db containers
+```
+docker-compose -p location-app-api -f deploy/docker-compose.prod.yml up --force-recreate --build -d
+```
