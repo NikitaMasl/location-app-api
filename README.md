@@ -18,7 +18,7 @@ You can study API documentation on
 ```
 ${BASE_URL}/api/docs
 ```
-## local deployment
+## production deployment
 create docker network in your enviroment with next command
 ```
 docker network create location-app-api
