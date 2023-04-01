@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:4.2
+    container_name: mongo
+    ports:
+      - 27028:27017
+    restart: always
+    volumes:
+      - /tmp/location-app-api/db:/data/db
+
+  core:
+    container_name: core
+    restart: always
+    build:
+      context: ../core
+    environment:
+      PORT: 8000
+      MONGO_URL: mongodb://mongo:27017/location-app-api
+      MONGO_TEST_URL: mongodb://mongo:27017/location-app-api-test
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    ports:
+      - 8000:8000
+      - 9229:9229
+
+networks:
+  default:
+    external:
+      name: location-app-api
