@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/location.dto';
-import { Location } from 'src/schemas/location.schema';
+import { Location } from './schema/location.schema';
 
 @ApiTags('Location endpoint')
 @Controller('locations')

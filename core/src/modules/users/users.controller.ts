@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { NotFoundInterceptor } from 'src/interceptors/notFoundInterceptor';
+import { userErrors } from 'src/const/errors/users.errors';
 import { CreateUserDto, FindOneParamsDto } from './dto/user.dto';
 import { UsersService } from './users.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from 'src/schemas/user.schema';
+import { User } from './schema/user.schema';
 
 @ApiTags('Users endpoint')
 @Controller('users')
@@ -19,7 +21,8 @@ export class UsersController {
     @ApiOperation({ summary: 'Get user by userName' })
     @ApiResponse({ status: 200, type: User })
     @Get(':userName')
-    getUserById(@Param() params: FindOneParamsDto): Promise<User> {
+    @UseInterceptors(new NotFoundInterceptor(userErrors.userDoesntExists))
+    getUserByUserName(@Param() params: FindOneParamsDto): Promise<User> {
         return this.userService.findbyUserName({ userName: params.userName });
     }
 }

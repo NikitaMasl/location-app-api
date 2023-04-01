@@ -1,10 +1,9 @@
-import { Get, Injectable, Post } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Model } from 'mongoose';
-import { CreateLocationDto } from 'src/locations/dto/location.dto';
-import { Location } from 'src/schemas/location.schema';
-import { User } from 'src/schemas/user.schema';
+import { CreateLocationDto } from 'src/modules/locations/dto/location.dto';
+import { Location } from './schema/location.schema';
+import { User } from 'src/modules/users/schema/user.schema';
 
 @Injectable()
 export class LocationsService {
