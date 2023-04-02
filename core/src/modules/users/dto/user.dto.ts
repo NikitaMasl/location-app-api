@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { userErrors } from 'src/const/errors/users.errors';
 import { USER_PROPS } from 'src/const/users/USER_PROPS';
 import { FindBy, UserExistingCheck } from 'src/validator/users/userExistingCheck';
@@ -24,6 +24,18 @@ export class FindOneParamsDto {
     })
     @ApiProperty({ example: 'Username', description: 'Unique username' })
     userName: string;
+}
+
+export class ChangeUserLocationDto {
+    @IsOptional()
+    @IsString()
+    @ApiProperty({ example: '92.23213', description: 'User horizontal position' })
+    horizontal?: string;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty({ example: '123.21332', description: 'User vertical position' })
+    vertical?: string;
 }
 
 export class FindByUserNameDto {
