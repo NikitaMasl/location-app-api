@@ -1,50 +1,54 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ChangeUserLocationDto, CreateUserDto, FindByUserNameDto } from './dto/user.dto';
-import { User } from './schema/user.schema';
+import { ChangeUserLocationDto, CreateUserDto, FindByUserNameDto, UserWithoutLocations } from './dto/user.dto';
+import { USER_TO_DTO, User } from './schema/user.schema';
+import { Location } from '../locations/schema/location.schema';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+    constructor(
+        @InjectModel(User.name) private userModel: Model<User>,
+        @InjectModel(Location.name) private locationModel: Model<Location>,
+    ) {}
 
     async create(createUserDto: CreateUserDto): Promise<User> {
         const createdUser = await this.userModel.create(createUserDto);
 
-        return createdUser;
+        return createdUser?.toDto();
     }
 
     async getAll(): Promise<User[]> {
         const users = await this.userModel.find({});
 
-        return Promise.all(users.map(async (u) => u.populate('locations')));
+        return Promise.all(users.map(async (u) => (await u.populate('locations')).toDto()));
     }
 
     async findbyUserName({ userName }: FindByUserNameDto): Promise<User> {
         const user = await this.userModel.findOne({ userName }).exec();
 
-        return user?.populate({
-            path: 'locations',
-        });
+        return user?.toDto(USER_TO_DTO.WITHOUT_LOCATION);
     }
 
     async getOneByField({ value, field }: { value: string; field: string }): Promise<User | null> {
-        return this.userModel.findOne({ [field]: value }).exec();
+        const user = await this.userModel.findOne({ [field]: value }).exec();
+
+        return user?.toDto(USER_TO_DTO.WITHOUT_LOCATION);
     }
 
     async changeUserPosition({
         userName,
-        horizontal,
-        vertical,
+        latitude,
+        longitude,
     }: ChangeUserLocationDto & FindByUserNameDto): Promise<User | null> {
         let updateObj: Record<string, string> = {};
 
-        if (horizontal) {
-            updateObj['currentLocation.horizontal'] = horizontal;
+        if (latitude) {
+            updateObj['latitude'] = latitude;
         }
 
-        if (vertical) {
-            updateObj['currentLocation.vertical'] = vertical;
+        if (longitude) {
+            updateObj['longitude'] = longitude;
         }
 
         const user = await this.userModel.findOneAndUpdate(
@@ -55,6 +59,22 @@ export class UsersService {
             { new: true },
         );
 
-        return user;
+        return user?.toDto(USER_TO_DTO.WITHOUT_LOCATION);
+    }
+
+    async deleteUser({ userName }: FindByUserNameDto): Promise<void> {
+        const user = await this.userModel.findOne({ userName });
+
+        if (!user) {
+            return;
+        }
+
+        await this.locationModel.deleteMany({
+            _id: { $in: user.locations || [] },
+        });
+
+        await this.userModel.deleteOne({
+            userName,
+        });
     }
 }

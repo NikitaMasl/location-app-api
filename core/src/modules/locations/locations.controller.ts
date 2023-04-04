@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocationsService } from './locations.service';
-import { CreateLocationDto } from './dto/location.dto';
+import { CreateLocationDto, RemoveLocationById } from './dto/location.dto';
 import { Location } from './schema/location.schema';
 
 @ApiTags('Location endpoint')
@@ -21,5 +21,12 @@ export class LocationsController {
     @Get()
     getAllCoords() {
         return this.locationService.getAllLocations();
+    }
+
+    @ApiOperation({ summary: 'Get all locations with users' })
+    @ApiResponse({ status: 200 })
+    @Delete(':id')
+    removeLocation(@Param() params: RemoveLocationById) {
+        return this.locationService.removeLocation({ id: params.id });
     }
 }

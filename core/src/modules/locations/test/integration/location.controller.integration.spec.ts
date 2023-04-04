@@ -3,8 +3,6 @@ import { Connection } from 'mongoose';
 import * as request from 'supertest';
 import { AppModule } from 'src/app.module';
 import { DatabaseService } from 'src/database/database.service';
-import { userErrors } from 'src/const/errors/users.errors';
-import { USER_PROPS } from 'src/const/users/USER_PROPS';
 import { ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 
@@ -39,14 +37,17 @@ describe('LocationController', () => {
     describe('create', () => {
         it('Endpoint should create new location', async () => {
             const TEST_LOCATION = {
-                coords: { horizontal: '98.321213213', vertical: '128.321213213' },
+                latitude: '98.321213213',
+                longitude: '128.321213213',
                 user: fakeUserId,
             };
 
             const response = await request(httpServer).post('/locations').send(TEST_LOCATION);
 
             expect(response.status).toBe(201);
-            expect(JSON.stringify(response.body.coords)).toEqual(JSON.stringify(TEST_LOCATION.coords));
+            expect(JSON.stringify({ latitude: response.body.latitude, longitude: response.body.longitude })).toEqual(
+                JSON.stringify({ latitude: TEST_LOCATION.latitude, longitude: TEST_LOCATION.longitude }),
+            );
         });
 
         it('Endpoint should return error, if no coords provided', async () => {
@@ -61,7 +62,8 @@ describe('LocationController', () => {
 
         it('Endpoint should return error, if no user provided', async () => {
             const TEST_LOCATION = {
-                coords: { horizontal: '98.321213213', vertical: '128.321213213' },
+                latitude: '98.321213213',
+                longitude: '128.321213213',
             };
 
             const response = await request(httpServer).post('/locations').send(TEST_LOCATION);
@@ -71,7 +73,8 @@ describe('LocationController', () => {
 
         it('Endpoint should return error, if not existing user provided', async () => {
             const TEST_LOCATION = {
-                coords: { horizontal: '98.321213213', vertical: '128.321213213' },
+                latitude: '98.321213213',
+                longitude: '128.321213213',
                 user: '6426a9e2f1f40d7deb95ad1f',
             };
 
@@ -82,7 +85,8 @@ describe('LocationController', () => {
 
         it('Endpoint should return error, if wrong user id provided', async () => {
             const TEST_LOCATION = {
-                coords: { horizontal: '98.321213213', vertical: '128.321213213' },
+                latitude: '98.321213213',
+                longitude: '128.321213213',
                 user: '6426a9e2f1',
             };
 
@@ -95,7 +99,8 @@ describe('LocationController', () => {
     describe('getLocations', () => {
         it('Endpoint should return locations list', async () => {
             const fakeLocation = {
-                coords: { horizontal: '98.321213213', vertical: '128.321213213' },
+                latitude: '98.321213213',
+                longitude: '128.321213213',
                 user: fakeUserId,
             };
 
@@ -107,7 +112,7 @@ describe('LocationController', () => {
             const location = response.body[0];
 
             expect(response.status).toBe(200);
-            expect(location.coords).toEqual(fakeLocation.coords);
+            expect(location.coords).toEqual({ latitude: fakeLocation.latitude, longitude: fakeLocation.longitude });
             expect(location.user._id).toEqual(fakeUserId);
         });
     });

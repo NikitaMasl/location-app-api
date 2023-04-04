@@ -29,15 +29,24 @@ export class FindOneParamsDto {
 export class ChangeUserLocationDto {
     @IsOptional()
     @IsString()
-    @ApiProperty({ example: '92.23213', description: 'User horizontal position' })
-    horizontal?: string;
+    @ApiProperty({ example: '92.23213', description: 'User latitude position' })
+    latitude?: string;
 
     @IsOptional()
     @IsString()
-    @ApiProperty({ example: '123.21332', description: 'User vertical position' })
-    vertical?: string;
+    @ApiProperty({ example: '123.21332', description: 'User longitude position' })
+    longitude?: string;
 }
 
 export class FindByUserNameDto {
     readonly userName: string;
 }
+
+// RETURN
+
+export type UserWithoutLocations = {
+    id: String;
+    userName: String;
+    latitude: String;
+    longitude: String;
+};

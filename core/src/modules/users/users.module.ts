@@ -4,10 +4,15 @@ import { UsersService } from './users.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schema/user.schema';
 import { UserExistingCheckRule } from 'src/validator/users/userExistingCheck';
-import { NotFoundInterceptor } from 'src/interceptors/notFoundInterceptor';
+import { Location, LocationSchema } from '../locations/schema/location.schema';
 
 @Module({
-    imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
+    imports: [
+        MongooseModule.forFeature([
+            { name: User.name, schema: UserSchema },
+            { name: Location.name, schema: LocationSchema },
+        ]),
+    ],
     controllers: [UsersController],
     providers: [UsersService, UserExistingCheckRule],
     exports: [UsersService],

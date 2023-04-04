@@ -15,6 +15,7 @@ async function start() {
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
     const config = new DocumentBuilder()
+        .setBasePath('/location-api')
         .setTitle('Location-app api documentation')
         .setDescription('It is REST api documentation for location app')
         .setVersion('0.0.1')

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NotFoundInterceptor } from 'src/interceptors/notFoundInterceptor';
 import { userErrors } from 'src/const/errors/users.errors';
@@ -41,5 +41,12 @@ export class UsersController {
             userName: params.userName,
             ...location,
         });
+    }
+
+    @ApiOperation({ summary: 'Delete user' })
+    @ApiResponse({ status: 200 })
+    @Delete(':userName')
+    deleteUser(@Param() params: FindOneParamsDto) {
+        this.userService.deleteUser({ userName: params.userName });
     }
 }

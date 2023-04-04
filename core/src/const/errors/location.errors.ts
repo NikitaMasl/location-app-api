@@ -1,5 +1,6 @@
 export const locationErrors = {
     coordShouldExists: 'Coords should exists',
-    horizontalShouldExists: 'Horizontal coord should exists',
-    verticalShouldExists: 'Vertical coord should exists',
+    latitudeShouldExists: 'Latitude coord should exists',
+    longitudeShouldExists: 'Longitude coord should exists',
+    locationShouldExists: 'Location should exists',
 };
