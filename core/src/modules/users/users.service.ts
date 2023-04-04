@@ -21,13 +21,13 @@ export class UsersService {
     async getAll(): Promise<User[]> {
         const users = await this.userModel.find({});
 
-        return Promise.all(users.map(async (u) => (await u.populate('locations')).toDto()));
+        return Promise.all(users.map(async (u) => (await u.populate('locations')).toDto(USER_TO_DTO.WITHOUT_LOCATION)));
     }
 
     async findbyUserName({ userName }: FindByUserNameDto): Promise<User> {
         const user = await this.userModel.findOne({ userName }).exec();
 
-        return user?.toDto(USER_TO_DTO.WITHOUT_LOCATION);
+        return (await user?.populate('locations')).toDto();
     }
 
     async getOneByField({ value, field }: { value: string; field: string }): Promise<User | null> {
