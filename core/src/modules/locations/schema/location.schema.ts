@@ -9,7 +9,7 @@ export enum LOCATION_TO_DTO {
     WITHOUT_USER = 'withoutUser',
 }
 
-@Schema()
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Location extends Document {
     @ApiProperty({ example: '92.23213', description: 'Location latitude' })
     @Prop()
@@ -38,6 +38,8 @@ LocationSchema.methods.toDto = function (toDto?: LOCATION_TO_DTO): Record<string
             latitude: this.latitude,
             longitude: this.longitude,
             dateTime: this.dateTime,
+            updated_at: this.updated_at,
+            created_at: this.created_at,
         };
     }
 
@@ -46,6 +48,8 @@ LocationSchema.methods.toDto = function (toDto?: LOCATION_TO_DTO): Record<string
         latitude: this.latitude,
         longitude: this.longitude,
         dateTime: this.dateTime,
+        updated_at: this.updated_at,
+        created_at: this.created_at,
         user: this.user.toDto(USER_TO_DTO.WITHOUT_LOCATION),
     };
 };

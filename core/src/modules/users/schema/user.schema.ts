@@ -9,7 +9,7 @@ export enum USER_TO_DTO {
     WITHOUT_LOCATION = 'withoutLocation',
 }
 
-@Schema()
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class User extends Document {
     @ApiProperty({ example: 'Username', description: 'Unique username' })
     @Prop({ required: true, unique: true })
@@ -39,6 +39,8 @@ UserSchema.methods.toDto = function (toDto?: USER_TO_DTO): Record<string, unknow
             userName: this.userName,
             latitude: this.latitude,
             longitude: this.longitude,
+            updated_at: this.updated_at,
+            created_at: this.created_at,
         };
     }
 
@@ -47,6 +49,8 @@ UserSchema.methods.toDto = function (toDto?: USER_TO_DTO): Record<string, unknow
         userName: this.userName,
         latitude: this.latitude,
         longitude: this.longitude,
+        updated_at: this.updated_at,
+        created_at: this.created_at,
         locations: this.locations.map((l: any) => l.toDto(LOCATION_TO_DTO.WITHOUT_USER)),
     };
 };
